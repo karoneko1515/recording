@@ -37,56 +37,177 @@ recording/
     └── minutes_*.md     # 議事録ファイル
 ```
 
-## 🚀 セットアップ手順
+## 🚀 セットアップ手順（完全版）
 
-### 1. 必要な環境
+### ステップ1: 必要な環境の確認
 
+以下がインストールされているか確認してください：
+
+- **Git**: バージョン管理ツール
 - **Python**: 3.9以上
-- **Ollama**: ローカルLLMの実行環境
-- **マイク**: 音声録音用
+- **pip**: Pythonパッケージマネージャー（Pythonに付属）
+- **マイク**: 音声録音用のデバイス
 
-### 2. リポジトリのクローン
+### ステップ2: Gitリポジトリのクローン
+
+#### GitHubからクローン
 
 ```bash
-git clone <このリポジトリのURL>
+# HTTPSでクローン（推奨）
+git clone https://github.com/karoneko1515/recording.git
+
+# またはSSHでクローン（SSH鍵を設定済みの場合）
+git clone git@github.com:karoneko1515/recording.git
+
+# リポジトリディレクトリに移動
 cd recording
 ```
 
-### 3. Pythonライブラリのインストール
+> **注意**: リポジトリURLは実際のGitHubリポジトリURLに置き換えてください。
+
+#### Gitがインストールされていない場合
+
+**Windows:**
+- [Git for Windows](https://gitforwindows.org/) からダウンロードしてインストール
+
+**macOS:**
+```bash
+# Homebrewを使用
+brew install git
+
+# またはXcode Command Line Toolsをインストール
+xcode-select --install
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt update
+sudo apt install git
+```
+
+**Linux (CentOS/RHEL):**
+```bash
+sudo yum install git
+```
+
+### ステップ3: Python環境のセットアップ
+
+#### Pythonのバージョン確認
+
+```bash
+python --version
+# または
+python3 --version
+```
+
+Python 3.9以上がインストールされていることを確認してください。
+
+#### Python仮想環境の作成（推奨）
+
+```bash
+# 仮想環境を作成
+python -m venv venv
+
+# 仮想環境を有効化
+# Windows (コマンドプロンプト)
+venv\Scripts\activate.bat
+
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
+
+# macOS / Linux
+source venv/bin/activate
+```
+
+#### 依存ライブラリのインストール
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Ollamaのインストールと起動
+> **注意**: インストールには数分かかる場合があります。
 
-#### Ollamaのインストール
+### ステップ4: Ollamaのインストールと設定
 
-公式サイトからインストール: https://ollama.ai/
+#### 4-1. Ollamaのインストール
 
-または、以下のコマンドでインストール（Linux/macOS）:
+**Windows:**
+
+1. [Ollama公式サイト](https://ollama.ai/) にアクセス
+2. "Download for Windows" をクリック
+3. ダウンロードした `OllamaSetup.exe` を実行
+4. インストールウィザードに従ってインストール
+
+**macOS:**
+
+方法1: 公式サイトからダウンロード
+1. [Ollama公式サイト](https://ollama.ai/) にアクセス
+2. "Download for Mac" をクリック
+3. ダウンロードした `.dmg` ファイルを開いてインストール
+
+方法2: Homebrewを使用
+```bash
+brew install ollama
+```
+
+**Linux (Ubuntu/Debian/CentOS/RHEL):**
 
 ```bash
+# 自動インストールスクリプト（推奨）
 curl -fsSL https://ollama.ai/install.sh | sh
 ```
 
-#### モデルのダウンロード
+手動インストール（詳細は [公式ドキュメント](https://github.com/ollama/ollama/blob/main/docs/linux.md) を参照）
 
+#### 4-2. Ollamaの起動
+
+**Windows:**
+- インストール後、Ollamaは自動的にバックグラウンドで起動します
+- タスクトレイにOllamaアイコンが表示されます
+
+**macOS:**
+- アプリケーションフォルダからOllamaを起動
+- メニューバーにOllamaアイコンが表示されます
+
+**Linux:**
 ```bash
-# Llama 3.1 8B（推奨、バランス型）
-ollama pull llama3.1:8b
-
-# または Qwen 2.5 7B（軽量、日本語特化）
-ollama pull qwen2.5:7b
-```
-
-#### Ollamaの起動
-
-```bash
+# ターミナルで起動（別のターミナルウィンドウで実行）
 ollama serve
 ```
 
-> **注意**: Ollamaは別のターミナルで起動したまま保持してください。
+> **重要**: Linuxの場合、Ollamaは別のターミナルウィンドウで起動したまま保持してください。
+
+#### 4-3. Ollamaが起動しているか確認
+
+```bash
+# Ollamaのバージョンを確認
+ollama --version
+
+# 実行中のモデルを確認
+ollama list
+```
+
+#### 4-4. LLMモデルのダウンロード
+
+```bash
+# Llama 3.1 8B（推奨、バランス型）約4.7GB
+ollama pull llama3.1:8b
+
+# または Qwen 2.5 7B（軽量、日本語特化）約4.4GB
+ollama pull qwen2.5:7b
+```
+
+> **注意**: モデルのダウンロードには時間がかかります（数分〜数十分）。
+> 初回のみ必要で、2回目以降は不要です。
+
+#### 4-5. モデルの動作確認
+
+```bash
+# Llama 3.1でテスト
+ollama run llama3.1:8b "こんにちは"
+
+# 終了するには /bye と入力
+```
 
 ### 5. 設定ファイルの編集（オプション）
 
