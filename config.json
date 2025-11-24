@@ -1,0 +1,19 @@
+{
+  "whisper": {
+    "model_size": "large-v3",
+    "device": "cpu",
+    "compute_type": "int8",
+    "language": "ja"
+  },
+  "ollama": {
+    "model": "llama3.1:8b",
+    "base_url": "http://localhost:11434"
+  },
+  "recording": {
+    "sample_rate": 16000,
+    "channels": 1
+  },
+  "output": {
+    "directory": "output"
+  }
+}

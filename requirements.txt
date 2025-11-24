@@ -1,0 +1,17 @@
+# オフライン自動議事録システム - 依存ライブラリ
+
+# Webフレームワーク
+Eel>=0.16.0
+
+# 音声録音
+sounddevice>=0.4.6
+scipy>=1.11.0
+
+# 文字起こし (faster-whisper)
+faster-whisper>=1.0.0
+
+# HTTP通信 (Ollama API用)
+requests>=2.31.0
+
+# NumPy（音声処理用）
+numpy>=1.24.0

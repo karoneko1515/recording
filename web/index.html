@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>オフライン自動議事録システム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎙️ オフライン自動議事録システム</h1>
+            <p class="subtitle">音声録音 → 文字起こし → 議事録生成</p>
+        </header>
+
+        <main>
+            <!-- ステータス表示 -->
+            <div class="status-section">
+                <div class="status-card">
+                    <h3>ステータス</h3>
+                    <p id="status-text">待機中</p>
+                    <p id="recording-time" class="recording-time"></p>
+                </div>
+            </div>
+
+            <!-- 録音コントロール -->
+            <div class="control-section">
+                <h2>1. 音声録音</h2>
+                <div class="button-group">
+                    <button id="start-recording-btn" class="btn btn-primary" onclick="startRecording()">
+                        🔴 録音開始
+                    </button>
+                    <button id="stop-recording-btn" class="btn btn-danger" onclick="stopRecording()" disabled>
+                        ⏹️ 録音停止
+                    </button>
+                </div>
+            </div>
+
+            <!-- 文字起こし・議事録生成コントロール -->
+            <div class="control-section">
+                <h2>2. 文字起こし・議事録生成</h2>
+                <div class="button-group">
+                    <button id="transcribe-btn" class="btn btn-secondary" onclick="transcribeAudio()" disabled>
+                        📝 文字起こし実行
+                    </button>
+                    <button id="generate-minutes-btn" class="btn btn-success" onclick="generateMinutes()" disabled>
+                        📄 議事録生成
+                    </button>
+                </div>
+            </div>
+
+            <!-- 結果表示 -->
+            <div class="result-section">
+                <h2>3. 結果</h2>
+
+                <div class="tab-container">
+                    <div class="tabs">
+                        <button class="tab-btn active" onclick="showTab('transcript')">文字起こし</button>
+                        <button class="tab-btn" onclick="showTab('minutes')">議事録</button>
+                    </div>
+                </div>
+
+                <div class="tab-content">
+                    <div id="transcript-tab" class="tab-pane active">
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="saveTranscript()">💾 文字起こしを保存</button>
+                            <button class="btn btn-small" onclick="copyToClipboard('transcript-text')">📋 コピー</button>
+                        </div>
+                        <textarea id="transcript-text" class="result-text" placeholder="文字起こし結果がここに表示されます..." readonly></textarea>
+                    </div>
+
+                    <div id="minutes-tab" class="tab-pane">
+                        <div class="action-buttons">
+                            <button class="btn btn-small" onclick="saveMinutes()">💾 議事録を保存</button>
+                            <button class="btn btn-small" onclick="copyToClipboard('minutes-text')">📋 コピー</button>
+                        </div>
+                        <textarea id="minutes-text" class="result-text" placeholder="議事録がここに表示されます..." readonly></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- プログレス表示 -->
+            <div id="progress-section" class="progress-section" style="display: none;">
+                <div class="progress-bar">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+                <p id="progress-text" class="progress-text"></p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Powered by Whisper (faster-whisper) + Ollama</p>
+        </footer>
+    </div>
+
+    <!-- Eel JavaScript -->
+    <script type="text/javascript" src="/eel.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
