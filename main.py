@@ -204,7 +204,7 @@ def main():
         eel.start(
             "index.html",
             size=(900, 700),
-            port=8080,
+            port=8081,
             mode="chrome",  # Chromeアプリモードで起動
             # mode="default",  # デフォルトブラウザで起動（Chromeがない場合）
         )
@@ -215,7 +215,7 @@ def main():
             eel.start(
                 "index.html",
                 size=(900, 700),
-                port=8080,
+                port=8081,
                 mode="default"
             )
         except Exception as e2:

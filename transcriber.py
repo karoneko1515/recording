@@ -167,7 +167,11 @@ class Transcriber:
                     result = whisperx.assign_word_speakers(diarize_result, result)
                     print("話者識別が完了しました")
                 except Exception as e:
-                    print(f"警告: 話者識別に失敗しました: {e}")
+                    import traceback
+                    print(f"警告: 話者識別に失敗しました:")
+                    print(f"エラー詳細: {type(e).__name__}: {str(e)}")
+                    print(f"トレースバック:")
+                    traceback.print_exc()
                     print("話者識別なしで続行します。")
 
         # Step 4: 結果の整形
