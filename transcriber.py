@@ -160,7 +160,7 @@ class Transcriber:
                         diarize_model.to(torch.device("cuda"))
 
                     diarize_result = diarize_model(
-                        audio,
+                        audio_file,  # ← ファイルパスを渡す（audioではなく）
                         min_speakers=self.min_speakers,
                         max_speakers=self.max_speakers
                     )
