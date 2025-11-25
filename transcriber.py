@@ -140,16 +140,6 @@ class Transcriber:
             return_char_alignments=False
         )
 
-        # デバッグ: result の構造を確認
-        print(f"DEBUG: result type: {type(result)}")
-        print(f"DEBUG: result keys: {result.keys() if isinstance(result, dict) else 'Not a dict'}")
-        if isinstance(result, dict) and "segments" in result:
-            print(f"DEBUG: segments length: {len(result['segments'])}")
-            if len(result['segments']) > 0:
-                print(f"DEBUG: first segment type: {type(result['segments'][0])}")
-                print(f"DEBUG: first segment keys: {result['segments'][0].keys() if isinstance(result['segments'][0], dict) else 'Not a dict'}")
-                print(f"DEBUG: first segment: {result['segments'][0]}")
-
         # Step 3: 話者識別
         diarize_result = None
         if self.enable_diarization:
