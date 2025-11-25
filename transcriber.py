@@ -130,7 +130,7 @@ class Transcriber:
             language_code=self.language,
             device=self.device
         )
-        result = whisperx.align(
+        aligned_result = whisperx.align(
             result["segments"],
             model_a,
             metadata,
@@ -138,6 +138,10 @@ class Transcriber:
             self.device,
             return_char_alignments=False
         )
+        # resultの構造を維持：aligned_resultは{"segments": [...], "word_segments": [...]}の形式
+        result["segments"] = aligned_result["segments"]
+        if "word_segments" in aligned_result:
+            result["word_segments"] = aligned_result["word_segments"]
 
         # Step 3: 話者識別
         diarize_result = None
