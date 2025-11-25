@@ -232,9 +232,9 @@ ollama run llama3.1:8b "こんにちは"
 
 #### 5-3. pyannote.audioモデルへのアクセス許可
 
-1. [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1) にアクセス
+1. [pyannote/speaker-diarization](https://huggingface.co/pyannote/speaker-diarization) にアクセス
 2. "Agree and access repository" をクリック
-3. [pyannote/segmentation-3.0](https://huggingface.co/pyannote/segmentation-3.0) にも同様にアクセス許可
+3. [pyannote/segmentation](https://huggingface.co/pyannote/segmentation) にも同様にアクセス許可
 
 #### 5-4. Tokenを設定ファイルに追加
 

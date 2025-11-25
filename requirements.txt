@@ -12,7 +12,7 @@ faster-whisper>=1.0.0
 whisperx>=3.1.1
 
 # 話者識別 (Speaker Diarization)
-pyannote.audio>=3.1.0
+pyannote.audio==2.1.1
 torch>=2.0.0
 torchaudio>=2.0.0
 
