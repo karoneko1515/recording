@@ -147,10 +147,18 @@ class Transcriber:
             else:
                 try:
                     print("Step 3/4: 話者識別中...")
-                    diarize_model = whisperx.DiarizationPipeline(
-                        use_auth_token=self.hf_token,
-                        device=self.device
+                    # pyannote.audioから直接Pipelineをインポート
+                    from pyannote.audio import Pipeline
+
+                    diarize_model = Pipeline.from_pretrained(
+                        "pyannote/speaker-diarization-3.1",
+                        use_auth_token=self.hf_token
                     )
+
+                    # デバイスを設定
+                    if self.device == "cuda":
+                        diarize_model.to(torch.device("cuda"))
+
                     diarize_result = diarize_model(
                         audio,
                         min_speakers=self.min_speakers,
