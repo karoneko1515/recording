@@ -152,7 +152,7 @@ class Transcriber:
                     from pyannote.audio import Pipeline
 
                     diarize_model = Pipeline.from_pretrained(
-                        "pyannote/speaker-diarization",
+                        "pyannote/speaker-diarization-3.1",
                         use_auth_token=self.hf_token
                     )
 
