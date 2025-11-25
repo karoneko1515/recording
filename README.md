@@ -5,14 +5,16 @@
 ## 📋 主な機能
 
 - **🔴 音声録音**: マイクから音声を録音してWAVファイルとして保存
-- **📝 文字起こし**: Whisperで音声をテキスト化（日本語対応）
+- **📝 文字起こし**: WhisperX で音声をテキスト化（日本語対応）
+- **👥 話者識別**: 誰が発言したかを自動的に識別（Speaker Diarization）
 - **📄 議事録生成**: ローカルLLMで構造化された議事録を自動生成
 - **🖥️ GUI**: Eel（WebベースUI）でシンプルな操作画面を提供
 
 ## 🛠️ 技術スタック
 
 - **言語**: Python 3.9以上
-- **音声認識**: [faster-whisper](https://github.com/SYSTRAN/faster-whisper) (軽量版Whisper)
+- **音声認識**: [WhisperX](https://github.com/m-bain/whisperX) (faster-whisper拡張版)
+- **話者識別**: [pyannote.audio](https://github.com/pyannote/pyannote-audio) (Speaker Diarization)
 - **LLM**: [Ollama](https://ollama.ai/) + Llama 3.1 8B または Qwen 2.5 7B
 - **GUI**: Eel（HTML/CSS/JavaScript + Python）
 - **音声録音**: sounddevice + scipy
@@ -209,7 +211,47 @@ ollama run llama3.1:8b "こんにちは"
 # 終了するには /bye と入力
 ```
 
-### 5. 設定ファイルの編集（オプション）
+### ステップ5: Hugging Face Tokenの取得（話者識別機能を使う場合）
+
+話者識別機能を使用するには、Hugging Face Tokenが必要です。
+
+#### 5-1. Hugging Faceアカウントの作成
+
+1. [Hugging Face](https://huggingface.co/) にアクセス
+2. "Sign Up" をクリックしてアカウントを作成（無料）
+
+#### 5-2. Tokenの取得
+
+1. ログイン後、右上のプロフィールアイコン → "Settings" をクリック
+2. 左メニューから "Access Tokens" を選択
+3. "New token" をクリック
+4. Token名を入力（例: "ollama-meeting-minutes"）
+5. Role は "Read" を選択
+6. "Generate token" をクリック
+7. 表示されたTokenをコピー（一度しか表示されません）
+
+#### 5-3. pyannote.audioモデルへのアクセス許可
+
+1. [pyannote/speaker-diarization-3.1](https://huggingface.co/pyannote/speaker-diarization-3.1) にアクセス
+2. "Agree and access repository" をクリック
+3. [pyannote/segmentation-3.0](https://huggingface.co/pyannote/segmentation-3.0) にも同様にアクセス許可
+
+#### 5-4. Tokenを設定ファイルに追加
+
+`config.json` の `hf_token` にTokenを貼り付けます：
+
+```json
+{
+  "diarization": {
+    "enabled": true,
+    "min_speakers": 1,
+    "max_speakers": 10,
+    "hf_token": "ここに取得したTokenを貼り付け"
+  }
+}
+```
+
+### ステップ6: 設定ファイルの編集（オプション）
 
 `config.json` を編集して、モデルや設定をカスタマイズできます。
 
@@ -219,7 +261,14 @@ ollama run llama3.1:8b "こんにちは"
     "model_size": "large-v3",  // Whisperモデル: tiny, base, small, medium, large-v2, large-v3
     "device": "cpu",           // デバイス: cpu, cuda
     "compute_type": "int8",    // 計算タイプ: int8, float16, float32
-    "language": "ja"           // 言語: ja, en など
+    "language": "ja",          // 言語: ja, en など
+    "use_whisperx": true       // WhisperXを使用（話者識別対応）
+  },
+  "diarization": {
+    "enabled": true,           // 話者識別を有効化
+    "min_speakers": 1,         // 最小話者数
+    "max_speakers": 10,        // 最大話者数
+    "hf_token": ""             // Hugging Face Token（必須）
   },
   "ollama": {
     "model": "llama3.1:8b",              // Ollamaモデル名
@@ -257,19 +306,27 @@ python main.py
 
 ### 文字起こしテキスト（`.txt`）
 
-```
-=== 文字起こし結果（タイムスタンプ付き） ===
+**話者識別付き（WhisperX使用時）:**
 
-[0:00:00 -> 0:00:05] 本日の会議を始めます。
-[0:00:05 -> 0:00:12] まず、プロジェクトの進捗について報告します。
+```
+=== 文字起こし結果（話者識別付き） ===
+
+[0:00:00 -> 0:00:05] SPEAKER_00: 本日の会議を始めます。
+[0:00:05 -> 0:00:12] SPEAKER_01: まず、プロジェクトの進捗について報告します。
+[0:00:12 -> 0:00:25] SPEAKER_00: ありがとうございます。現在の状況はどうですか？
+[0:00:25 -> 0:00:40] SPEAKER_02: スケジュール通りに進んでいます。
 ...
 
 === 文字起こし結果（テキストのみ） ===
 
 本日の会議を始めます。
 まず、プロジェクトの進捗について報告します。
+ありがとうございます。現在の状況はどうですか？
+スケジュール通りに進んでいます。
 ...
 ```
+
+> **注**: SPEAKER_00, SPEAKER_01... は自動的に識別された話者です。議事録生成時にLLMが参加者名を推測することがあります。
 
 ### 議事録（`.md` Markdown形式）
 

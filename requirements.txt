@@ -7,8 +7,14 @@ Eel>=0.16.0
 sounddevice>=0.4.6
 scipy>=1.11.0
 
-# 文字起こし (faster-whisper)
+# 文字起こし (faster-whisper & WhisperX)
 faster-whisper>=1.0.0
+whisperx>=3.1.1
+
+# 話者識別 (Speaker Diarization)
+pyannote.audio>=3.1.0
+torch>=2.0.0
+torchaudio>=2.0.0
 
 # HTTP通信 (Ollama API用)
 requests>=2.31.0

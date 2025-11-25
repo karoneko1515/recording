@@ -72,11 +72,19 @@ def initialize_modules():
     )
 
     # 文字起こしモジュールを初期化
+    whisper_config = config["whisper"]
+    diarization_config = config.get("diarization", {})
+
     transcriber = Transcriber(
-        model_size=config["whisper"]["model_size"],
-        device=config["whisper"]["device"],
-        compute_type=config["whisper"]["compute_type"],
-        language=config["whisper"]["language"]
+        model_size=whisper_config["model_size"],
+        device=whisper_config["device"],
+        compute_type=whisper_config["compute_type"],
+        language=whisper_config["language"],
+        use_whisperx=whisper_config.get("use_whisperx", True),
+        enable_diarization=diarization_config.get("enabled", True),
+        min_speakers=diarization_config.get("min_speakers", 1),
+        max_speakers=diarization_config.get("max_speakers", 10),
+        hf_token=diarization_config.get("hf_token", None)
     )
 
     # 議事録生成モジュールを初期化
